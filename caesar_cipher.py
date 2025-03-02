@@ -1,37 +1,43 @@
-def caesar_cipher(text, shift, action):
+def caesar_cipher(text, shift, mode):
     result = ""
+    
+    # Determine the shift direction based on the mode
+    if mode == 'decrypt':
+        shift = -shift
+    
+    # Iterate through each character in the text
     for char in text:
-        # for uppercase letters
+        # Check if the character is an uppercase letter
         if char.isupper():
-            start = ord('A')
-            result += chr((ord(char) - start + (shift if action == "e" else -shift)) % 26 + start)
-        # for lowercase letters
+            # Shift the character and wrap around using modulo 26
+            result += chr((ord(char) + shift - 65) % 26 + 65)
+        # Check if the character is a lowercase letter
         elif char.islower():
-            start = ord('a')
-            result += chr((ord(char) - start + (shift if action == "e" else -shift)) % 26 + start)
-        # for non-alphabet characters
+            # Shift the character and wrap around using modulo 26
+            result += chr((ord(char) + shift - 97) % 26 + 97)
         else:
+            # If it's not a letter, leave it unchanged
             result += char
+    
     return result
 
 def main():
-    print("Task 01 : Caesar Cipher Program")
+    # Get user input
+    message = input("Enter the message: ")
+    shift = int(input("Enter the shift value: "))
+    mode = input("Choose mode (encrypt/decrypt): ").lower()
     
-    message = input("Enter your message: ")
-    shift = int(input("Enter a positive shift value: "))
+    # Validate the mode
+    if mode not in ['encrypt', 'decrypt']:
+        print("Invalid mode. Please choose 'encrypt' or 'decrypt'.")
+        return
     
-    # Choose encryption or decryption
-    action = input("Do you want to encrypt or decrypt the message? (enter 'e' or 'd'): ").lower()
-    
-    while action not in ["e", "d"]:
-        print("Invalid action. Please enter 'e' or 'd'.")
-        action = input("Do you want to encrypt or decrypt the message? (enter 'e' or 'd'): ").lower()
-    
-    # Encrypt or decrypt the message
-    result = caesar_cipher(message, shift, action)
+    # Perform the encryption or decryption
+    result = caesar_cipher(message, shift, mode)
     
     # Display the result
-    print(f"Result: {result}")
+    print(f"The result is: {result}")
 
 if __name__ == "__main__":
     main()
+    
